@@ -1,0 +1,20 @@
+name: Cron Producer
+
+on:
+  schedule:
+    - cron: "*/1 * * * *"
+
+jobs:
+  upload_artifact:
+    name: "Upload Artifact"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Produce Artifact
+        run: echo ${{ github.run_number }} > run_number.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: run_number.txt
+          retention-days: 1
+          path: run_number.txt
