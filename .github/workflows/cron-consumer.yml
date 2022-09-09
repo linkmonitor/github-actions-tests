@@ -6,7 +6,7 @@ on:
 
 jobs:
   consume_artifact:
-    name: "Consum Artifact"
+    name: "Consume Artifact"
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
