@@ -1,0 +1,51 @@
+name: Called Workflow
+
+on:
+  workflow_call:
+    inputs:
+      BUILD_NUMBER_OFFSET:
+        required: true
+        type: string
+    outputs:
+      BUILD_NUMBER:
+        description: "The build number which dependent jobs should use"
+        value: ${{ jobs.build_number.outputs.BUILD_NUMBER }}
+
+jobs:
+  build_number:
+    name: "Build Number"
+    runs-on: ubuntu-latest
+    outputs:
+      BUILD_NUMBER: ${{ steps.build-number.outputs.build-number }}
+    steps:
+      - name: Set Build Number
+        uses: mlilback/build-number@v1
+        with:
+          base: ${{ inputs.BUILD_NUMBER_OFFSET }}
+          run-id: ${{ github.run_number }}
+
+      - name: Export Build Number
+        id: build-number
+        run: echo "::set-output name=build-number::${BUILD_NUMBER}"
+
+  reusable_job:
+    name: "Reusable Job"
+    needs: [build_number]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet Person
+        run: echo ${{ secrets.NAME }}
+
+      - name: Print Build Number
+        run: echo ${{ needs.build_number.outputs.BUILD_NUMBER }}
+
+      - name: Create Artifact
+        run: |
+          echo "Hello, World!" > greeting.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: greeting.txt
+          retention-days: 1
+          path: greeting.txt

@@ -1,0 +1,36 @@
+name: Calling Workflow
+
+on:
+  pull_request:
+    branches: [main]
+
+# Cancel in-progress workflows from the same pull-request branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  call_reusable_workflow:
+    name: "Call Reusable Workflow"
+    uses: ./.github/workflows/callee.yml
+    with:
+      BUILD_NUMBER_OFFSET: 100
+    secrets: inherit
+
+  use_artifact_from_reusable_workflow:
+    name: "Use Artifact From Reusable Workflow"
+    needs: [call_reusable_workflow]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: greeting.txt
+
+      - name: Print Artifact
+        run: |
+          cat greeting.txt
+
+      - name: Print BUILD_NUMBER
+        run: |
+          echo "BUILD_NUMBER=${{ needs.call_reusable_workflow.outputs.BUILD_NUMBER }}"
