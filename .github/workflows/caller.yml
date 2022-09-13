@@ -34,3 +34,15 @@ jobs:
       - name: Print BUILD_NUMBER
         run: |
           echo "BUILD_NUMBER=${{ needs.call_reusable_workflow.outputs.BUILD_NUMBER }}"
+
+      - name: Download Horseshoe Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: horseshoe-artifacts
+          path: horseshoe-artifacts
+
+      - name: Explore Horseshoe Artifacts
+        run: |
+          ls -al
+          echo "--------"
+          ls -al horseshoe-artifacts
