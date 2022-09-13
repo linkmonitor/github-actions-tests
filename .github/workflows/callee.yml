@@ -11,6 +11,9 @@ on:
         description: "The build number which dependent jobs should use"
         value: ${{ jobs.build_number.outputs.BUILD_NUMBER }}
 
+env:
+  NAME: ${{ secrets.NAME }}
+
 jobs:
   build_number:
     name: "Build Number"
@@ -36,6 +39,9 @@ jobs:
       - name: Greet Person
         run: echo ${{ secrets.NAME }}
 
+      - name: Greet Person (environment)
+        run: echo ${{ env.NAME }}
+
       - name: Print Build Number
         run: echo ${{ needs.build_number.outputs.BUILD_NUMBER }}
 
@@ -49,3 +55,27 @@ jobs:
           name: greeting.txt
           retention-days: 1
           path: greeting.txt
+
+      - name: Create Artifacts
+        run: |
+          mkdir -p build/horseshoe.axf.obj
+          touch build/version_string.txt
+          touch build/horseshoe.axf
+          touch build/horseshoe.axf.obj/firmware_tz.bin
+          touch build/horseshoe.axf.obj/flash_tz.bin
+
+      - name: Stage Artifacts
+        run: |
+          mkdir -p yohana/horseshoe/development/artifacts
+          cp \
+            build/version_string.txt \
+            build/horseshoe.axf \
+            build/horseshoe.axf.obj/firmware_tz.bin \
+            build/horseshoe.axf.obj/flash_tz.bin \
+            yohana/horseshoe/development/artifacts
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: horseshoe-artifacts
+          path: yohana/horseshoe/development/artifacts
