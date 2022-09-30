@@ -1,0 +1,20 @@
+name: Failing Step
+
+on:
+  pull_request:
+    branches: [main]
+
+# Cancel in-progress workflows from the same pull-request branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  failing_job:
+    name: "Failing Job"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Failing Step"
+        run: |
+          false
+          true
