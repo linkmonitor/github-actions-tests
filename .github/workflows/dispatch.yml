@@ -20,5 +20,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Print Greeting"
-        echo: |
+        run: |
           echo "${{ inputs.message }}"
