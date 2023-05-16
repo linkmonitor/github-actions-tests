@@ -13,8 +13,12 @@ jobs:
   generate_output:
     name: "Generate Output"
     runs-on: ubuntu-latest
+    outputs:
+      A: "${{ steps.set-output.outputs.A }}"
+      B: "${{ steps.set-output.outputs.B }}"
     steps:
       - name: Set Output
+        id: set-output
         run: |
           echo "A=1" >> "$GITHUB_OUTPUT"
           echo "B=2" >> "$GITHUB_OUTPUT"
