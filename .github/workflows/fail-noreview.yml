@@ -1,0 +1,18 @@
+name: Fail if there are changes to noreview/
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-fail:
+    name: "Check and fail"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check and fail
+        run: |
+          grep -r 'test' noreview/ && exit 1 || exit 0
