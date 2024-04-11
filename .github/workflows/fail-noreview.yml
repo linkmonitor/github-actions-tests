@@ -3,6 +3,8 @@ name: Fail if there are changes to noreview/
 on:
   pull_request:
     branches: [main]
+    paths-ignore:
+      - "noreview/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
