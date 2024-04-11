@@ -1,0 +1,22 @@
+name: Fail if there are changes to noreview/
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "noreview/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-fail:
+    name: "Check and fail"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Sources"
+        uses: actions/checkout@v3
+      - name: "Check and fail"
+        run: |
+          true
