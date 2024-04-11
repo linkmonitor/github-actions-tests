@@ -13,6 +13,8 @@ jobs:
     name: "Check and fail"
     runs-on: ubuntu-latest
     steps:
-      - name: Check and fail
+      - name: "Checkout Sources"
+        uses: actions/checkout@v3
+      - name: "Check and fail"
         run: |
           grep -r 'test' noreview/ && exit 1 || exit 0
