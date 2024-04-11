@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths-ignore:
       - "noreview/**"
+      - ".github/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
