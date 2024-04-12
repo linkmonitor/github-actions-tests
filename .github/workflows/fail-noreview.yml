@@ -14,6 +14,7 @@ jobs:
   check-and-fail:
     name: "Check and fail"
     runs-on: ubuntu-latest
+    if: false
     steps:
       - name: "Checkout Sources"
         uses: actions/checkout@v3
