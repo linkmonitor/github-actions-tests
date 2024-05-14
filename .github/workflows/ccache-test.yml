@@ -13,3 +13,4 @@ jobs:
       - uses: hendrikmuhs/ccache-action@v1.2
       - run: |
           ccache -p
+          echo ${{ github.workspace }}
