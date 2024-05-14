@@ -1,0 +1,16 @@
+name: CCACHE Action Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  ccache_action_test:
+    name: CCACHE Action Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hendrikmuhs/ccache-action@v1.2
+      - run: |
+          ccache -p
+          echo ${{ github.workspace }}
